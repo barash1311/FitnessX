@@ -1,0 +1,41 @@
+package com.fitness.userservice.service;
+
+import com.fitness.userservice.dtos.RegisterRequest;
+import com.fitness.userservice.dtos.UserResponse;
+import com.fitness.userservice.models.User;
+import com.fitness.userservice.repository.userRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+@Service
+@RequiredArgsConstructor
+public class userServiceImplementation implements userService {
+    private final userRepository userRepository;
+
+    @Override
+    public UserResponse register(RegisterRequest request) {
+        if(userRepository.existsByEmail(request.getEmail())){
+            throw new RuntimeException("Email already exists");
+        }
+        User user = User.builder()
+                .email(request.getEmail())
+                .password(request.getPassword()) // ideally encode before saving
+                .firstName(request.getFirstName())
+                .lastName(request.getLastName())
+                .build();
+        userRepository.save(user);
+        return mapToUserResponse(user);
+    }
+
+
+    private UserResponse mapToUserResponse(User user) {
+        return UserResponse.builder()
+                .id(user.getId())
+                .email(user.getEmail())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .build();
+
+        }
+    }
+
