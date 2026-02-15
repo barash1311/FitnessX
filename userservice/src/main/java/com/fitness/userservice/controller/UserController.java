@@ -4,7 +4,6 @@ import com.fitness.userservice.dtos.RegisterRequest;
 import com.fitness.userservice.dtos.UserResponse;
 import com.fitness.userservice.service.userService;
 import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

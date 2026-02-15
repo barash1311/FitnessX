@@ -45,6 +45,7 @@ public class userServiceImplementation implements userService {
                 .email(user.getEmail())
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
+                .createdAt(user.getCreatedAt())
                 .build();
         }
     }
