@@ -12,8 +12,13 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class ActivityServiceImplementation implements ActivityService{
     private final ActivityRepository activityRepository;
+    private final UserValidationService userValidationService;
     @Override
     public ActivityResponse track(ActivityRequest request) {
+        boolean isValid=userValidationService.validateUser(request.getUserId());
+        if(!isValid){
+            throw new RuntimeException("User not valid"+request.getUserId());
+        }
         LocalDateTime startTime = (request.getStartTime() != null)
                 ? request.getStartTime()
                 : LocalDateTime.now();

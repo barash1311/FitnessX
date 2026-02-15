@@ -10,4 +10,5 @@ import java.util.UUID;
 public interface userService {
     UserResponse register(RegisterRequest registerRequest);
     UserResponse getUserProfile(UUID userId);
+    Boolean existByUserId(UUID userId);
 }
