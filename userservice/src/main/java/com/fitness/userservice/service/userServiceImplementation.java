@@ -7,9 +7,12 @@ import com.fitness.userservice.repository.userRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 @RequiredArgsConstructor
 public class userServiceImplementation implements userService {
+
     private final userRepository userRepository;
 
     @Override
@@ -27,6 +30,14 @@ public class userServiceImplementation implements userService {
         return mapToUserResponse(user);
     }
 
+    @Override
+    public UserResponse getUserProfile(UUID userId) {
+        User user=userRepository.findById(userId)
+                .orElseThrow(()-> new RuntimeException("User Not found"));
+
+        return mapToUserResponse(user);
+    }
+
 
     private UserResponse mapToUserResponse(User user) {
         return UserResponse.builder()
@@ -35,7 +46,6 @@ public class userServiceImplementation implements userService {
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
                 .build();
-
         }
     }
 
