@@ -38,6 +38,11 @@ public class userServiceImplementation implements userService {
         return mapToUserResponse(user);
     }
 
+    @Override
+    public Boolean existByUserId(UUID userId) {
+        return  userRepository.existsById(userId);
+    }
+
 
     private UserResponse mapToUserResponse(User user) {
         return UserResponse.builder()
