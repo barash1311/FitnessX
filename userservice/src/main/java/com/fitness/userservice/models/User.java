@@ -29,8 +29,9 @@ public class User {
     private String firstName;
     @Column(unique = true, nullable = false)
     private String lastName;
+    @Builder.Default
     @Enumerated(EnumType.STRING)
-    private UserRole role=  UserRole.USER;
+    private UserRole role = UserRole.USER;
     @CreationTimestamp
     @Column(updatable = false)
     private LocalDateTime createdAt;
