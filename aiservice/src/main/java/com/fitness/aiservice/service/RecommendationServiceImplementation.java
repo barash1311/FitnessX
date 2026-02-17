@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -14,6 +15,12 @@ public class RecommendationServiceImplementation implements RecommendationServic
 
     @Override
     public List<RecommendationResponse> getUserRecommendation(String userId) {
+        // Ensure userId follows UUID format for consistency with userservice
+        try {
+            UUID.fromString(userId);
+        } catch (IllegalArgumentException e) {
+            throw new RuntimeException("Invalid userId format. Expected UUID: " + userId);
+        }
         return recommendationRepository.findByUserId(userId);
     }
 
