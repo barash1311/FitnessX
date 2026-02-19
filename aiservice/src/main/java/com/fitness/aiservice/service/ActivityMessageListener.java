@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 public class ActivityMessageListener {
     @KafkaListener(topics = "${kafka.topic.name}", groupId = "activity-processor-group")
     public void processActivityMessage(Activity activity){
-        //pending to be implemented an error to be resolved
         log.info("Received activity for processing message: {}",activity.getUserId());
     }
 }
