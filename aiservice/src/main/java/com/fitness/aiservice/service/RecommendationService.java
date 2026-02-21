@@ -6,6 +6,5 @@ import java.util.List;
 
 public interface RecommendationService {
     List<RecommendationResponse> getUserRecommendation(String userId);
-
     RecommendationResponse getActivityRecommendation(String activityId);
 }
