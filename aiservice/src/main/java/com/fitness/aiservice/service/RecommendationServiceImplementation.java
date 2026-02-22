@@ -14,7 +14,7 @@ public class RecommendationServiceImplementation implements RecommendationServic
     private final RecommendationRepository recommendationRepository;
 
     @Override
-    public List<RecommendationResponse> getUserRecommendation(String userId) { 
+    public List<RecommendationResponse> getUserRecommendation(String userId) {
         try {
             UUID.fromString(userId);
         } catch (IllegalArgumentException e) {
