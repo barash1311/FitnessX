@@ -32,3 +32,7 @@ logging:
       org.springframework.data.mongodb.core.MongoTemplate: INFO
       org.mongodb.driver: INFO
 
+gemini:
+  api:
+    url:${GEMINI_API_URL}
+    key:${GEMINI_API_KEY}
