@@ -38,20 +38,20 @@ public class ActivityAiService {
                 return null;
             }
 
-            // Step 1: extract and clean
+            
             String rawText = textNode.asText().replaceFirst("(?i)^json\\s*", "").trim();
 
-            // Step 2: unescape JSON safely
+
             String sanitized = rawText
                     .replaceAll("\\r", "")
                     .replaceAll("\\n", "")
                     .trim();
 
-// Step 3: parse the inner JSON
+
             JsonNode cleanedNode = mapper.readTree(sanitized);
             log.info("Response from Cleaned AI: {}", cleanedNode.toPrettyString());
 
-            // You can now map cleanedNode to Recommendation
+
             return mapper.treeToValue(cleanedNode.path("analysis"), RecommendationResponse.class);
 
         } catch (Exception e) {
