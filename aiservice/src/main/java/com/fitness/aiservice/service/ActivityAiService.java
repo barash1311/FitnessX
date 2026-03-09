@@ -38,7 +38,7 @@ public class ActivityAiService {
                 return null;
             }
 
-            
+
             String rawText = textNode.asText().replaceFirst("(?i)^json\\s*", "").trim();
 
 
