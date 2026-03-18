@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 @Repository
-public interface RecommendationRepository extends MongoRepository<Recommendation,String> {
+public interface RecommendationRepository extends MongoRepository<RecommendationResponse,String> {
     List<RecommendationResponse> findByUserId(String userId);
     Optional<RecommendationResponse> findByActivityId(String activityId);
 }

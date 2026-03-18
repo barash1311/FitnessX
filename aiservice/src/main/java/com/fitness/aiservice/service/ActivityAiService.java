@@ -9,10 +9,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.time.LocalDateTime;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -64,15 +62,33 @@ public class ActivityAiService {
             List<String> suggestions=extraSuggestions(cleanedNode.path("Suggestions"));
             List<String> safety=extraSafety(cleanedNode.path("safety"));
 
-
-
-
-
-
+            return RecommendationResponse.builder()
+                    .activityId(activity.getId())
+                    .userId(activity.getUserId())
+                    .recommendation(fullAnalysis.toString())
+                    .improvements(improvements)
+                    .suggestions(suggestions)
+                    .safety(safety)
+                    .createdAt(activity.getCreatedAt())
+                    .build();
         } catch (Exception e) {
-            log.error("Error cleaning AI response", e);
-            return null;
+            e.printStackTrace();
+            return createDefaultRecommendation(activity);
         }
+    }
+
+    private RecommendationResponse createDefaultRecommendation(Activity activity) {
+        return RecommendationResponse.builder()
+                .activityId(activity.getId())
+                .userId(activity.getUserId())
+                .recommendation("Unable to generate Detailed analysis")
+                .improvements(Collections.singletonList("Continue with your current routine "))
+                .suggestions(Collections.singletonList("Consult a docktor"))
+                .safety(Arrays.asList(
+                        "Dont lift heavy","warm up","stay hydrated"
+                ))
+                .createdAt(LocalDateTime.now())
+                .build();
     }
 
     private List<String> extraSafety(JsonNode safetyNode) {

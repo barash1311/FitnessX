@@ -1,12 +1,14 @@
 package com.fitness.aiservice.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
+@Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class RecommendationResponse {
     private String id;
