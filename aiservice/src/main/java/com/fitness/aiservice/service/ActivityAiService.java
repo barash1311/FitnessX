@@ -9,6 +9,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -49,14 +54,65 @@ public class ActivityAiService {
 
 
             JsonNode cleanedNode = mapper.readTree(sanitized);
-            log.info("Response from Cleaned AI: {}", cleanedNode.toPrettyString());
+            JsonNode analysisNode=cleanedNode.path("analysis");
+            StringBuilder fullAnalysis=new StringBuilder();
+            addAnalysisSection(fullAnalysis,analysisNode,"overall","Overall:");
+            addAnalysisSection(fullAnalysis,analysisNode,"pace","Pace:");
+            addAnalysisSection(fullAnalysis,analysisNode,"heartRate","Heart Rate:");
+            addAnalysisSection(fullAnalysis,analysisNode,"calorieBurnt","caloriesBurned:");
+            List<String> improvements=extraImprovements(cleanedNode.path("improvements"));
+            List<String> suggestions=extraSuggestions(cleanedNode.path("Suggestions"));
+            List<String> safety=extraSafety(cleanedNode.path("safety"));
 
 
-            return mapper.treeToValue(cleanedNode.path("analysis"), RecommendationResponse.class);
+
+
+
 
         } catch (Exception e) {
             log.error("Error cleaning AI response", e);
             return null;
+        }
+    }
+
+    private List<String> extraSafety(JsonNode safetyNode) {
+        List<String> safety=new ArrayList<>();
+        if(safetyNode.isArray()){
+            safetyNode.forEach(safetyNode1 -> safety.add(safetyNode1.asText()));
+        }
+        return safety.isEmpty()? Collections.singletonList("No specific safety points provided"):
+                safety;
+    }
+
+    private List<String> extraSuggestions(JsonNode suggestionsNode) {
+        List<String> suggestions=new ArrayList<>();
+        if(suggestionsNode.isArray()){
+            suggestionsNode.forEach(suggestionNode -> {
+                String workout=suggestionNode.path("workout").asText();
+                String description=suggestionNode.path("description").asText();
+                suggestions.add(String.format("%s: %s",workout,description));
+            });
+        }
+        return suggestions.isEmpty()? Collections.singletonList("No specific suggestions provided"):
+                suggestions;
+    }
+
+    private List<String> extraImprovements(JsonNode improvementsNode) {
+        List<String> improvements=new ArrayList<>();
+        if(improvementsNode.isArray()){
+            improvementsNode.forEach(improvementNode -> {
+                String area=improvementNode.path("area").asText();
+                String details=improvementNode.path("recommendation").asText();
+                improvements.add(String.format("%s: %s",area,details));
+            });
+        }
+        return improvements.isEmpty()? Collections.singletonList("No specific improvements provided"):
+                improvements;
+    }
+
+    private void addAnalysisSection(StringBuilder fullAnalysis, JsonNode analysisNode, String key, String prefix) {
+        if(!analysisNode.path(key).isMissingNode() && !analysisNode.path(key).isNull()){
+            fullAnalysis.append(prefix).append(analysisNode.path(key).asText()).append("\n");
         }
     }
 
